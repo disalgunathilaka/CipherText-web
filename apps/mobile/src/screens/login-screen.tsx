@@ -28,7 +28,7 @@ const LoginScreen = ({ navigation }) => {
     <>
       <View style={styles.headerContainer}>
         <Text category="h1" status="control">
-          Hello
+          Hello 2
         </Text>
         <Text style={styles.signInLabel} category="s1" status="control">
           Sign in to your account

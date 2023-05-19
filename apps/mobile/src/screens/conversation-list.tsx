@@ -3,7 +3,6 @@ import {
   Layout,
   List,
   StyleService,
-  Text,
   useStyleSheet,
 } from '@ui-kitten/components';
 import { useState } from 'react';
