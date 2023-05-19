@@ -5,7 +5,7 @@ export class CreateMessageDto {
   @IsNotEmpty({ message: 'message should contain text' })
   text: string;
 
-  @IsArray()
+  @IsString()
   @IsNotEmpty({ message: 'chat Id is required' })
   chatId: string;
 

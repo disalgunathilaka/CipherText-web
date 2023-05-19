@@ -10,6 +10,8 @@ import {
   Icon,
 } from '@ui-kitten/components';
 import { ReactElement, useState } from 'react';
+import { useSignInMutation } from '../hooks/auth/sign-in';
+import axios from 'axios';
 
 const LoginScreen = ({ navigation }) => {
   const styles = useStyleSheet(themedStyles);
@@ -17,6 +19,7 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
+  const mutation = useSignInMutation();
 
   const renderPasswordIcon = (props): ReactElement => (
     <TouchableWithoutFeedback onPress={() => setShowPassword(!showPassword)}>
@@ -24,11 +27,24 @@ const LoginScreen = ({ navigation }) => {
     </TouchableWithoutFeedback>
   );
 
+  const loginMutation = async () => {
+    await axios
+      .get('http://192.168.8.123:3333/api', {})
+      .then((data) => {
+        console.log('===== success ====');
+        console.log(data.headers);
+        console.log('===== success ====');
+      })
+      .catch((error) => {
+        console.log(JSON.stringify(error));
+      });
+  };
+
   return (
     <>
       <View style={styles.headerContainer}>
         <Text category="h1" status="control">
-          Hello 2
+          Hello
         </Text>
         <Text style={styles.signInLabel} category="s1" status="control">
           Sign in to your account
@@ -59,9 +75,10 @@ const LoginScreen = ({ navigation }) => {
         </View>
       </Layout>
       <Button
+        onPress={() => loginMutation()}
         style={styles.signInButton}
         size="giant"
-        onPress={() => navigation.navigate('Converstations')}
+        //onPress={() => navigation.navigate('Converstations')}
       >
         SIGN IN
       </Button>

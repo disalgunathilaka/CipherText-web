@@ -10,7 +10,15 @@ export class ChatService {
   ) {}
 
   createChat(data: { users: string[]; name: string }, createdBy: string) {
-    const users = data.users.map((user) => {
+    const userIds = [];
+
+    if (!data.users.includes(createdBy)) {
+      userIds.push(createdBy);
+    }
+
+    userIds.push(...data.users);
+
+    const users = userIds.map((user) => {
       return {
         userId: user,
         lastAccessTime: new Date().toISOString(),
@@ -25,9 +33,15 @@ export class ChatService {
   }
 
   findUserChats(userId: string, isAccepted: boolean) {
-    return this.chatModel.find({
-      'users.userId': userId,
-      'users.isJoined': isAccepted,
-    });
+    return this.chatModel
+      .find({
+        'users.userId': userId,
+        'users.isJoined': isAccepted,
+      })
+      .populate({
+        path: 'users.userId',
+        model: 'user',
+        select: 'name email',
+      });
   }
 }

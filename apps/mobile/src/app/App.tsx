@@ -7,17 +7,22 @@ import ChatScreen from '../screens/chat-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screens/login-screen';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const Stack = createNativeStackNavigator();
 
+const queryClient = new QueryClient();
+
 const App: React.FC = () => {
   return (
-    <NavigationContainer>
-      <IconRegistry icons={[EvaIconsPack]} />
-      <ApplicationProvider {...eva} theme={eva.light}>
-        <NavStack />
-      </ApplicationProvider>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <IconRegistry icons={[EvaIconsPack]} />
+        <ApplicationProvider {...eva} theme={eva.light}>
+          <NavStack />
+        </ApplicationProvider>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 };
 

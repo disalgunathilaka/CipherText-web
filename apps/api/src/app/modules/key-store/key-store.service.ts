@@ -12,7 +12,13 @@ export class KeyStoreService {
   ) {}
 
   async findByUser(userId: string) {
-    return await this.keyStoreModel.findOne({ userId, isValid: true });
+    const data = await this.keyStoreModel.findOne({ userId, isValid: true });
+
+    if (!data) {
+      return this.create({ userId });
+    }
+
+    return data;
   }
 
   async create(data: { userId: string }) {

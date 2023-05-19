@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export type MessagesDocument = Message & Document;
 
@@ -28,7 +28,7 @@ export class Message {
   @Prop()
   attachment: MessageAttachment;
 
-  @Prop()
+  @Prop({ type: mongoose.Schema.Types.Mixed })
   sentLocation: {
     lat: number;
     lng: number;

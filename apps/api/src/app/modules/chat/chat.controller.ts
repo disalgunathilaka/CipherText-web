@@ -1,18 +1,25 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { getCurrentUser } from '../auth/decorator/current-user.decorator';
 import { ChatCreateDto } from './dto/create-chat.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('chat')
+@UsePipes(ValidationPipe)
+@UseGuards(AuthGuard('jwt'))
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
   @Post('create')
   async createUser(@Body() data: ChatCreateDto, @getCurrentUser() id: string) {
-    if (data.users.includes(id)) {
-      data.users.push(id);
-    }
-
     return await this.chatService.createChat(data, id);
   }
 
