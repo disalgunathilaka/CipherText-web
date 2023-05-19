@@ -12,5 +12,6 @@ import { KeyStoreModule } from '../key-store/key-store.module';
   ],
   controllers: [MessagesController],
   providers: [MessagesService],
+  exports: [MessagesService],
 })
 export class MessagesModule {}

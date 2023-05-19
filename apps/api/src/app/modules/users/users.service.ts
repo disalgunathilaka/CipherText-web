@@ -36,6 +36,12 @@ export class UsersService {
     return this.sanitizeUser(user);
   }
 
+  async findOneByEmail(email: string) {
+    const user = await this.userModel.findOne({ email: email });
+    if (!user) return { user: null };
+    return { user: this.sanitizeUser(user) };
+  }
+
   async findByLogin(loginData: UserLoginDto) {
     const { email, password } = loginData;
     const user = await this.userModel.findOne({ email });

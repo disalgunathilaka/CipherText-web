@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { ChatDocument } from './schema/chat.schema';
 import { KeyStoreService } from '../key-store/key-store.service';
+import { MessagesService } from '../messages/messages.service';
 
 @Injectable()
 export class ChatService {
   constructor(
     @InjectModel('chat') private readonly chatModel: Model<ChatDocument>,
-    private readonly keyStoreService: KeyStoreService
+    private readonly keyStoreService: KeyStoreService,
+    private readonly messageService: MessagesService
   ) {}
 
   async createChat(data: { users: string[]; name: string }, createdBy: string) {
@@ -24,9 +26,9 @@ export class ChatService {
 
     const users = userIds.map((user) => {
       return {
-        userId: user,
+        userId: new mongoose.Types.ObjectId(user),
         lastAccessTime: new Date().toISOString(),
-        isJoined: user === createdBy,
+        isJoined: true,
       };
     });
 
@@ -52,5 +54,37 @@ export class ChatService {
         path: 'keyPair',
         model: 'key-store',
       });
+  }
+
+  async getChatLocations(chatId: string) {
+    const chat = await this.chatModel.findById(chatId).exec();
+    if (!chat) {
+      throw new NotFoundException('Chat not found');
+    }
+
+    const locations = [];
+
+    for (const user of chat.users) {
+      const lastMessage = await this.messageService.getlastMessage(
+        chatId,
+        user.userId
+      );
+
+      if (lastMessage && lastMessage.sentLocation) {
+        locations.push({
+          userId: user.userId,
+          lastAccessTime: user.lastAccessTime,
+          lastMessageLocation: lastMessage.sentLocation,
+        });
+      } else {
+        locations.push({
+          userId: user.userId,
+          lastAccessTime: user.lastAccessTime,
+          lastMessageLocation: { lat: 0, lng: 0 },
+        });
+      }
+    }
+
+    return locations;
   }
 }

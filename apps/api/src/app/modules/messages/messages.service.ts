@@ -28,4 +28,11 @@ export class MessagesService {
       },
     });
   }
+
+  async getlastMessage(chatId: string, userId: string) {
+    return await this.messageModel
+      .findOne({ chatId, sendBy: userId })
+      .sort({ createdAt: -1 })
+      .exec();
+  }
 }
