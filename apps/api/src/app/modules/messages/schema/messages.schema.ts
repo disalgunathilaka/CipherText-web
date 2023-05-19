@@ -20,12 +20,6 @@ export class Message {
   text: string;
 
   @Prop()
-  isRead: boolean;
-
-  @Prop()
-  date: string;
-
-  @Prop()
   chatId: string;
 
   @Prop()

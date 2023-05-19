@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { getCurrentUser } from '../auth/decorator/current-user.decorator';
 import { ChatCreateDto } from './dto/create-chat.dto';
@@ -14,5 +14,15 @@ export class ChatController {
     }
 
     return await this.chatService.createChat(data, id);
+  }
+
+  @Get('/accepted')
+  async getAcceptedChats(@getCurrentUser() id: string) {
+    return await this.chatService.findUserChats(id, true);
+  }
+
+  @Get('/pending')
+  async getPendingChats(@getCurrentUser() id: string) {
+    return await this.chatService.findUserChats(id, false);
   }
 }

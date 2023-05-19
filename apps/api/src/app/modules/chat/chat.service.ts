@@ -23,4 +23,11 @@ export class ChatService {
       users,
     });
   }
+
+  findUserChats(userId: string, isAccepted: boolean) {
+    return this.chatModel.find({
+      'users.userId': userId,
+      'users.isJoined': isAccepted,
+    });
+  }
 }

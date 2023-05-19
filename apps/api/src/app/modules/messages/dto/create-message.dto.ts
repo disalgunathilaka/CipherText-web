@@ -1,6 +1,6 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class ChatCreateDto {
+export class CreateMessageDto {
   @IsString()
   @IsNotEmpty({ message: 'message should contain text' })
   text: string;
@@ -8,4 +8,10 @@ export class ChatCreateDto {
   @IsArray()
   @IsNotEmpty({ message: 'chat Id is required' })
   chatId: string;
+
+  @IsNumber()
+  lat: number;
+
+  @IsNumber()
+  lng: number;
 }
