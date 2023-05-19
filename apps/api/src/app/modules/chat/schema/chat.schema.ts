@@ -24,6 +24,9 @@ export class Chat {
 
   @Prop()
   keyPair: string;
+
+  @Prop()
+  dissabledScreenShots: boolean;
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat);

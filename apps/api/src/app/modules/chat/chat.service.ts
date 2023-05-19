@@ -4,13 +4,15 @@ import mongoose, { Model } from 'mongoose';
 import { ChatDocument } from './schema/chat.schema';
 import { KeyStoreService } from '../key-store/key-store.service';
 import { MessagesService } from '../messages/messages.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ChatService {
   constructor(
     @InjectModel('chat') private readonly chatModel: Model<ChatDocument>,
     private readonly keyStoreService: KeyStoreService,
-    private readonly messageService: MessagesService
+    private readonly messageService: MessagesService,
+    private readonly userService: UsersService
   ) {}
 
   async createChat(data: { users: string[]; name: string }, createdBy: string) {
@@ -56,6 +58,15 @@ export class ChatService {
       });
   }
 
+  async updateChatScreenShots(id: string, val: boolean) {
+    console.log(id, val);
+    return await this.chatModel.findByIdAndUpdate(id, {
+      $set: {
+        dissabledScreenShots: val,
+      },
+    });
+  }
+
   async getChatLocations(chatId: string) {
     const chat = await this.chatModel.findById(chatId).exec();
     if (!chat) {
@@ -70,15 +81,19 @@ export class ChatService {
         user.userId
       );
 
+      const userDetails = await this.userService.findOneById(user.userId);
+
       if (lastMessage && lastMessage.sentLocation) {
         locations.push({
           userId: user.userId,
+          user: userDetails,
           lastAccessTime: user.lastAccessTime,
           lastMessageLocation: lastMessage.sentLocation,
         });
       } else {
         locations.push({
           userId: user.userId,
+          user: userDetails,
           lastAccessTime: user.lastAccessTime,
           lastMessageLocation: { lat: 0, lng: 0 },
         });

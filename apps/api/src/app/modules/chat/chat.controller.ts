@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -39,5 +40,16 @@ export class ChatController {
   @Get('location/:chatId')
   async getLastMessageLocations(@Param('chatId') chatId: string) {
     return await this.chatService.getChatLocations(chatId);
+  }
+
+  @Put('update/screenshot-status/:chatId')
+  async updateChatScreenShotStatus(
+    @Param('chatId') chatId: string,
+    @Body()
+    data: {
+      status: boolean;
+    }
+  ) {
+    return await this.chatService.updateChatScreenShots(chatId, data.status);
   }
 }
