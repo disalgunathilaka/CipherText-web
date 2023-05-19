@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { View, TouchableWithoutFeedback } from 'react-native';
 import {
   Button,
@@ -10,7 +11,7 @@ import {
 } from '@ui-kitten/components';
 import { ReactElement, useState } from 'react';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const styles = useStyleSheet(themedStyles);
 
   const [email, setEmail] = useState<string>('');
@@ -57,7 +58,11 @@ const LoginScreen = () => {
           </Button>
         </View>
       </Layout>
-      <Button style={styles.signInButton} size="giant">
+      <Button
+        style={styles.signInButton}
+        size="giant"
+        onPress={() => navigation.navigate('Converstations')}
+      >
         SIGN IN
       </Button>
       <Button style={styles.signUpButton} appearance="ghost" status="basic">
