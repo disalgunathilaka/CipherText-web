@@ -6,6 +6,8 @@ import { UsersModule } from './modules/users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './modules/auth/auth.module';
 import { KeyStoreModule } from './modules/key-store/key-store.module';
+import { ChatModule } from './modules/chat/chat.module';
+import { MessagesModule } from './modules/messages/messages.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { KeyStoreModule } from './modules/key-store/key-store.module';
     UsersModule,
     AuthModule,
     KeyStoreModule,
+    ChatModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
