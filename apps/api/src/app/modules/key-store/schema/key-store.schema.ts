@@ -6,9 +6,6 @@ export type KeyStoreDocument = KeyPair & Document;
 @Schema({ timestamps: true })
 export class KeyPair {
   @Prop()
-  userId: string;
-
-  @Prop()
   privateKey: string;
 
   @Prop()

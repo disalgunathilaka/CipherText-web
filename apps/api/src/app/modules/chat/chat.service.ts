@@ -2,19 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ChatDocument } from './schema/chat.schema';
+import { KeyStoreService } from '../key-store/key-store.service';
 
 @Injectable()
 export class ChatService {
   constructor(
-    @InjectModel('chat') private readonly chatModel: Model<ChatDocument>
+    @InjectModel('chat') private readonly chatModel: Model<ChatDocument>,
+    private readonly keyStoreService: KeyStoreService
   ) {}
 
-  createChat(data: { users: string[]; name: string }, createdBy: string) {
+  async createChat(data: { users: string[]; name: string }, createdBy: string) {
     const userIds = [];
 
     if (!data.users.includes(createdBy)) {
       userIds.push(createdBy);
     }
+
+    const keys = await this.keyStoreService.create();
 
     userIds.push(...data.users);
 
@@ -29,11 +33,12 @@ export class ChatService {
     return this.chatModel.create({
       name: data.name,
       users,
+      keyPair: keys._id,
     });
   }
 
-  findUserChats(userId: string, isAccepted: boolean) {
-    return this.chatModel
+  async findUserChats(userId: string, isAccepted: boolean) {
+    return await this.chatModel
       .find({
         'users.userId': userId,
         'users.isJoined': isAccepted,
@@ -41,7 +46,11 @@ export class ChatService {
       .populate({
         path: 'users.userId',
         model: 'user',
-        select: 'name email',
+        select: 'email',
+      })
+      .populate({
+        path: 'keyPair',
+        model: 'key-store',
       });
   }
 }

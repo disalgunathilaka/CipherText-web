@@ -16,3 +16,15 @@ export const decryptMessage = ({
     return 'enable to decrypt message';
   }
 };
+
+export function encryptWithPrivateKey({
+  text,
+  privateKey,
+}: {
+  text: string;
+  privateKey: string;
+}): string {
+  const rsa = new NodeRSA(privateKey);
+  const ciphertext = rsa.encrypt(text, 'hex');
+  return ciphertext.toString();
+}

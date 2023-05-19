@@ -12,6 +12,8 @@ import { MessagesService } from './messages.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { getCurrentUser } from '../auth/decorator/current-user.decorator';
+import { EncryptMessageDto } from './dto/encrypt-message-dto';
+import { encryptWithPrivateKey } from '../../../utils/decrypt-message';
 
 @Controller('messages')
 @UsePipes(ValidationPipe)
@@ -30,5 +32,10 @@ export class MessagesController {
     @getCurrentUser() id: string
   ) {
     return this.messagesService.createMessage(message, id);
+  }
+
+  @Post('encrypt')
+  encryptMessage(@Body() data: EncryptMessageDto) {
+    return encryptWithPrivateKey(data);
   }
 }

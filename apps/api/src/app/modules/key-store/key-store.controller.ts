@@ -17,23 +17,11 @@ import { getCurrentUser } from '../auth/decorator/current-user.decorator';
 export class KeyStoreController {
   constructor(private readonly keyStoreService: KeyStoreService) {}
 
-  @Post('/generate-key')
-  @UseGuards(AuthGuard('jwt'))
-  async currentUser(@getCurrentUser() id: string) {
-    return await this.keyStoreService.create({ userId: id });
-  }
-
-  @Get('/public-key/:userId')
-  async getPublicKey(
-    @getCurrentUser() id: string,
-    @Param('userId') userId: string
-  ) {
-    return await this.keyStoreService.getPublicKey(userId);
-  }
-
   @Get('/my-keys')
   @UseGuards(AuthGuard('jwt'))
   async getMykeys(@getCurrentUser() id: string) {
-    return await this.keyStoreService.findByUser(id);
+    return {
+      keys: true,
+    };
   }
 }

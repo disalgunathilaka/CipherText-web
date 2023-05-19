@@ -21,6 +21,9 @@ export class Chat {
 
   @Prop()
   name: string;
+
+  @Prop()
+  keyPair: string;
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat);
