@@ -1,0 +1,18 @@
+{
+  "name": "mobile",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.21.0",
+    "@eva-design/eva": "^2.1.1",
+    "@react-native-async-storage/async-storage": "*",
+    "@testing-library/jest-native": "*",
+    "@testing-library/react-native": "*",
+    "@ui-kitten/components": "^5.1.2",
+    "react": "*",
+    "react-native": "*",
+    "react-native-appearance": "^0.3.4",
+    "react-native-config": "*",
+    "react-native-svg": "^13.8.0"
+  }
+}
